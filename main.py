@@ -36,8 +36,8 @@ def next_scene(choice):
     #come back for part 2
   if (choice == "blue_door"):
     blue_door()
-  if (choice == "next_room"):
-    next_room()
+  if (choice == "guard_door"):
+    guard_door()
 
 def red_door():
   print("\nYou see a great red dragon!!")
@@ -56,7 +56,7 @@ def game_over(reason):
     print("\nCongrats YOU WIN!!")
   else:
     print("\nWell that was silly you were " + reason)
-  exit(0)
+  
 
 # PART 2
 #create blue door option
@@ -103,12 +103,13 @@ def blue_door():
       treasure_choice = input("\nTake all " + str(treasure_num) +" items? type YES or NO > ")
 
       if (treasure_choice.upper() == "YES"):
-        for treasure in range(len(treasure_chest)):
+        for treasure in treasure_chest:
           if(treasure == "sword"):
             print("Nice sword! Attack Power +1")
             player_attack_power += 1
-          backpack.append(treasure_chest.remove(treasure))
+          backpack.append(treasure)
         show_backpack()
+        treasure_chest.clear()
       else:
         print("\nWho needs treasure, I'm outta here!")
     else:
@@ -133,6 +134,7 @@ def blue_door():
     print("Looks like you'll need to fight")
     guard_attack_power = 2
     fight(guard_HP, guard_attack_power)
+  
   next_scene("guard_door")
 
 def show_backpack():
@@ -145,10 +147,8 @@ def fight(enemy_HP, enemy_attack_power):
   global player_HP
   global player_attack_power
 
-  choice = input("\nFight? Type YES or NO")
+  choice = input("\nFight? Type YES or NO > ")
   while (player_HP > 0 and choice.upper() == "YES" and enemy_HP > 0):
-    print("Player HP: " + str(player_HP))
-    print("Enemy HP: " + str(enemy_HP))
     #player attacks
     attack_chance = random.randint(1,10)
     if(attack_chance > 4):
@@ -164,25 +164,32 @@ def fight(enemy_HP, enemy_attack_power):
       player_HP -= enemy_attack_power
     else:
       print("\nEnemy Missed!")
+    
+    print("Player HP: " + str(player_HP))
+    print("Enemy HP: " + str(enemy_HP))
+
     if(player_HP > 0 and enemy_HP > 0):
-      choice = input("\nFight? Type YES or NO")
+      choice = input("\nFight? Type YES or NO > ")
 
   if(enemy_HP < 1 and player_HP > 0):
     print("\nYou killed your enemy!")
-    return
+    
   else:
     print("you spare your enemy")
   
   if(player_HP < 1):
     game_over(" you were killed by your enemy!!")
 
-def next_room():
+def guard_door():
   print("\nYour are now in a new room... are you free or do you continue your quest")
-  choice = input("type FREEDOM or CONTINUE")
+  choice = input("type FREEDOM or CONTINUE > ")
   if(choice.upper() == "FREEDOM"):
     game_over("win")
-  else:
+  elif(choice.upper() == "CONTINUE"):
     print("\nThe adventure continues...please continue coding")
+  else:
+    print("\nInput unknown - try again")
+    guard_door()
 # run the game
 main()
 
