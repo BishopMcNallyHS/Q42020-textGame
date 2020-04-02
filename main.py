@@ -22,24 +22,14 @@ def start_adventure():
   door = input("\nWhich door will you go through? type RED or BLUE > ")
   if (door.upper() == "RED"):
     print("\nYou go through the RED Door")
-    next_scene("red_door")
+    red_door_02()
   elif (door.upper() == "BLUE"):
     print("\nYou go through the BLUE Door")
-    next_scene("blue_door")
+    blue_door_03()
   else:
     start_adventure()#error check in case of bad input starts the function again
 
-#create next_scene() that contorls the rest of the game
-def next_scene(choice):
-  if (choice == "red_door"):
-    red_door()
-    #come back for part 2
-  if (choice == "blue_door"):
-    blue_door()
-  if (choice == "guard_door"):
-    guard_door()
-
-def red_door():
+def red_door_02():
   print("\nYou see a great red dragon!!")
   dragon_move = input("\nWhat do you do? type RUN or FIGHT > ")
   if (dragon_move.upper() == "RUN"):
@@ -48,7 +38,7 @@ def red_door():
     print("\nYou try to fight the dragon....")
     game_over("Eaten by a dragon")
   else:
-    next_scene("red_door")#error check in case of bad input starts the function again
+    red_door_02()#error check in case of bad input starts the function again
 
 #create game_over() that takes in a string describing the reason of the game over
 def game_over(reason):
@@ -66,7 +56,7 @@ backpack = []
 player_HP = 10 
 player_attack_power = 1 
 
-def blue_door():
+def blue_door_03():
   global backpack
   global player_HP#p3
   global player_attack_power#p3
@@ -135,7 +125,7 @@ def blue_door():
     guard_attack_power = 2
     fight(guard_HP, guard_attack_power)
   
-  next_scene("guard_door")
+  guard_door_04()
 
 def show_backpack():
   global backpack
@@ -180,7 +170,7 @@ def fight(enemy_HP, enemy_attack_power):
   if(player_HP < 1):
     game_over(" you were killed by your enemy!!")
 
-def guard_door():
+def guard_door_04():
   print("\nYour are now in a new room... are you free or do you continue your quest")
   choice = input("type FREEDOM or CONTINUE > ")
   if(choice.upper() == "FREEDOM"):
@@ -189,7 +179,7 @@ def guard_door():
     print("\nThe adventure continues...please continue coding")
   else:
     print("\nInput unknown - try again")
-    guard_door()
+    guard_door_04()
 # run the game
 main()
 
