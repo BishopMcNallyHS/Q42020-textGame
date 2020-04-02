@@ -7,6 +7,8 @@
 # ask the player for their name and store the INPUT into an appropriately named variable
 # Greet the player by their name
 #
+import random #p3
+
 def main():
   player_name = input("What's your name? > ")
   print("Hi " + player_name + ", Welcome to the adventure zone!")
@@ -29,12 +31,13 @@ def start_adventure():
 
 #create next_scene() that contorls the rest of the game
 def next_scene(choice):
-  
   if (choice == "red_door"):
     red_door()
     #come back for part 2
   if (choice == "blue_door"):
     blue_door()
+  if (choice == "next_room"):
+    next_room()
 
 def red_door():
   print("\nYou see a great red dragon!!")
@@ -58,8 +61,15 @@ def game_over(reason):
 # PART 2
 #create blue door option
 backpack = []
+
+#p3 vars
+player_HP = 10 
+player_attack_power = 1 
+
 def blue_door():
   global backpack
+  global player_HP#p3
+  global player_attack_power#p3
   '''
     The player finds a treasure chest, options to investigate the treasure 
     chest or guard.
@@ -94,6 +104,9 @@ def blue_door():
 
       if (treasure_choice.upper() == "YES"):
         for treasure in range(len(treasure_chest)):
+          if(treasure == "sword"):
+            print("Nice sword! Attack Power +1")
+            player_attack_power += 1
           backpack.append(treasure_chest.remove(treasure))
         show_backpack()
       else:
@@ -104,12 +117,72 @@ def blue_door():
     print("\nThe guard is more interesting, let's go that way!")
   # PART 3 
   # Deal with the guard
-  
+  print("\nYou try to sneak past the guard...")
+  random_result = random.randint(1,10)
+  guard_HP = 5
+  if(random_result < 2):#10% chance stays alseep
+    print("\nYou manage to sneak past the guard and through the door")
+    
+  elif(random_result < 5):
+    print("\nYou try to sneak past the guard and through the door ")
+    print("You wake him but he's not ready to fight")
+    guard_attack_power = 1
+    fight(guard_HP, guard_attack_power)
+  else:
+    print("\nYou accidentally kick the treasure chest and wake the guard")  
+    print("Looks like you'll need to fight")
+    guard_attack_power = 2
+    fight(guard_HP, guard_attack_power)
+  next_scene("guard_door")
+
 def show_backpack():
   global backpack
   print("\nCurrently in my backpack: ")
   print(backpack)
+
+#p3
+def fight(enemy_HP, enemy_attack_power):
+  global player_HP
+  global player_attack_power
+
+  choice = input("\nFight? Type YES or NO")
+  while (player_HP > 0 and choice.upper() == "YES" and enemy_HP > 0):
+    print("Player HP: " + str(player_HP))
+    print("Enemy HP: " + str(enemy_HP))
+    #player attacks
+    attack_chance = random.randint(1,10)
+    if(attack_chance > 4):
+      print("\nYou Hit!")
+      enemy_HP -= player_attack_power
+    else:
+      print("\nYou Miss!")
+
+    #enemy attacks
+    attack_chance = random.randint(1,10)
+    if(attack_chance > 7):
+      print("\nYou're Hit!")
+      player_HP -= enemy_attack_power
+    else:
+      print("\nEnemy Missed!")
+    if(player_HP > 0 and enemy_HP > 0):
+      choice = input("\nFight? Type YES or NO")
+
+  if(enemy_HP < 1 and player_HP > 0):
+    print("\nYou killed your enemy!")
+    return
+  else:
+    print("you spare your enemy")
   
+  if(player_HP < 1):
+    game_over(" you were killed by your enemy!!")
+
+def next_room():
+  print("\nYour are now in a new room... are you free or do you continue your quest")
+  choice = input("type FREEDOM or CONTINUE")
+  if(choice.upper() == "FREEDOM"):
+    game_over("win")
+  else:
+    print("\nThe adventure continues...please continue coding")
 # run the game
 main()
 
